@@ -1,0 +1,18 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Data folders (DO NOT PUSH DATA)
+data/raw/
+data/processed/
+
+# Virtual environments
+.env
+.venv
+conda/
+
+# OS files
+.DS_Store
