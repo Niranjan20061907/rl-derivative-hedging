@@ -12,6 +12,29 @@ def simulate_heston(
     steps,
     seed=None,
 ):
+    """_summary_
+
+    Args:
+        S0 (): Initial Stock Price
+        v0 (): Initial Variance (Volatility²)
+        --> Volatility = √variance
+
+        rho (): Correlation Between Price & Volatility
+
+        kappa (): Mean Reversion Speed of Volatility
+        How fast volatility pulls back to its long-term average.
+                •	Large kappa → volatility snaps back quickly
+                •	Small kappa → volatility stays high/low for long
+
+        theta (): Long-Run Average Variance
+
+        sigma (): Volatility of Volatility (Vol-of-Vol)
+        T (): Total Time Horizon
+        steps (): Number of Time Steps
+        seed (): Random Seed (Reproducibility).
+                •   Fixes randomness so results can be repeated.
+
+    """
     if seed is not None:
         np.random.seed(seed)
 
