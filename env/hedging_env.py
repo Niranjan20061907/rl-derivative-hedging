@@ -50,6 +50,18 @@ class HedgingEnv(gym.Env):
 
         return self._get_obs(), {}
 
+    # def _get_obs(self):
+    #     S = self.prices[self.t]
+    #     remaining_T = self.T * (1 - self.t / self.steps)
+
+    #     delta = bs_delta(S, self.K, remaining_T, self.r, self.sigma)
+    #     gamma = bs_gamma(S, self.K, remaining_T, self.r, self.sigma)
+
+    #     return np.array(
+    #         [S, delta, gamma, remaining_T, self.sigma, self.hedge_position],
+    #         dtype=np.float32,
+    #     )
+
     def _get_obs(self):
         S = self.prices[self.t]
         remaining_T = self.T * (1 - self.t / self.steps)
@@ -57,8 +69,18 @@ class HedgingEnv(gym.Env):
         delta = bs_delta(S, self.K, remaining_T, self.r, self.sigma)
         gamma = bs_gamma(S, self.K, remaining_T, self.r, self.sigma)
 
+        log_moneyness = np.log(S / self.K)
+        time_scaled = remaining_T / self.T
+
         return np.array(
-            [S, delta, gamma, remaining_T, self.sigma, self.hedge_position],
+            [
+                log_moneyness,
+                delta,
+                gamma,
+                time_scaled,
+                self.sigma,
+                self.hedge_position,
+            ],
             dtype=np.float32,
         )
 
