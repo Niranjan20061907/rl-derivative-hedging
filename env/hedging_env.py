@@ -136,6 +136,7 @@ class HedgingEnv(gym.Env):
         self.option_value = new_option_value
 
         # Reward: penalize variance + cost
-        reward = -(pnl**2)
+        lambda_risk = 0.1  # start small
+        reward = pnl - lambda_risk * (pnl**2)
 
         return self._get_obs(), reward, done, False, {}
