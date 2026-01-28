@@ -1,7 +1,7 @@
 import numpy as np
 import gymnasium as gym
 from gymnasium import spaces
-
+from simulator.heston import simulate_heston
 from simulator.gbm import simulate_gbm
 from pricing.black_scholes import bs_call_price, bs_delta, bs_gamma
 
@@ -12,7 +12,15 @@ class HedgingEnv(gym.Env):
     """
 
     def __init__(
-        self, S0=100, K=100, r=0.05, sigma=0.2, T=1.0, steps=252, cost_rate=0.001
+        self,
+        S0=100,
+        K=100,
+        r=0.05,
+        sigma=0.2,
+        T=1.0,
+        steps=252,
+        cost_rate=0.001,
+        use_heston=False,
     ):
         super().__init__()
 
@@ -23,6 +31,7 @@ class HedgingEnv(gym.Env):
         self.T = T
         self.steps = steps
         self.cost_rate = cost_rate
+        self.use_heston = use_heston
 
         # Action: change in hedge position
         self.action_space = spaces.Box(low=-1.0, high=1.0, shape=(1,), dtype=np.float32)
@@ -37,9 +46,21 @@ class HedgingEnv(gym.Env):
     def reset(self, seed=None, options=None):
         super().reset(seed=seed)
 
-        self.prices = simulate_gbm(
-            S0=self.S0, mu=self.r, sigma=self.sigma, T=self.T, steps=self.steps
-        )
+        if self.use_heston:
+            self.prices, self.vars = simulate_heston(
+                S0=self.S0,
+                v0=self.sigma**2,
+                rho=-0.7,
+                kappa=2.0,
+                theta=self.sigma**2,
+                sigma=0.5,
+                T=self.T,
+                steps=self.steps,
+            )
+        else:
+            self.prices = simulate_gbm(
+                S0=self.S0, mu=self.r, sigma=self.sigma, T=self.T, steps=self.steps
+            )
 
         self.t = 0
         self.hedge_position = 0.0
