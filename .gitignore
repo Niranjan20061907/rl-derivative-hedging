@@ -1,0 +1,27 @@
+# Python cache
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Data folders (DO NOT PUSH DATA)
+data/raw/
+data/processed/
+
+# Virtual environments
+.env
+.venv
+conda/
+
+# QuantLab generated artifacts
+checkpoints/*.zip
+results/*
+!results/.gitkeep
+!checkpoints/.gitkeep
+
+# OS files
+.DS_Store
