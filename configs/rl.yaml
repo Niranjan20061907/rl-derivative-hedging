@@ -1,0 +1,35 @@
+seed: 42
+experiment_name: ppo_hedging
+checkpoint_dir: checkpoints
+results_dir: results
+
+environment:
+  S0: 100.0
+  K: 100.0
+  r: 0.05
+  sigma: 0.2
+  T: 1.0
+  steps: 252
+  cost_rate: 0.001
+  use_heston: false
+  lambda_risk: 0.1
+  heston_rho: -0.7
+  heston_kappa: 2.0
+  heston_theta:
+  heston_vol_of_vol: 0.5
+
+ppo:
+  policy: MlpPolicy
+  total_timesteps: 10000
+  learning_rate: 0.0003
+  batch_size: 64
+  gamma: 0.99
+  gae_lambda: 0.95
+  clip_range: 0.2
+  n_steps: 256
+  verbose: 1
+
+evaluation:
+  episodes: 10
+  deterministic: true
+  include_no_hedge: true
