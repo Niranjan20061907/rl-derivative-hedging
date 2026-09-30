@@ -4,7 +4,7 @@ This repository is a Python package organized around one experiment pipeline: si
 
 ## Root files and project setup
 
-- `.gitignore` keeps Python caches, virtual environments, downloaded data, locally generated checkpoints and run output, and macOS `.DS_Store` files out of version control.
+- `.gitignore` keeps Python caches, virtual environments, downloaded data, locally generated checkpoints and run output, and macOS `.DS_Store` files out of version control. The `.gitkeep` placeholders below are the exceptions that keep the empty output directories visible in a fresh checkout.
 - `README.md` is the setup and user guide. It explains the accounting conventions, observation and action contract, commands, metrics, experiment splits, benchmark methodology, and limitations.
 - `FILE_GUIDE.md` (this file) explains the purpose of every maintained project file and how the pieces connect.
 - `pyproject.toml` defines package metadata, runtime and optional dependencies, command-line entry points, package discovery under `src`, pytest defaults, and Ruff rules.
@@ -12,6 +12,8 @@ This repository is a Python package organized around one experiment pipeline: si
 - `.env.example` was removed: it only contained a configuration pointer and no code reads environment variables for this project.
 - `configs/rl.yaml` is the default experiment file. It holds the market and transaction-cost assumptions, PPO training parameters, training seed, validation interval, and held-out test range and chunk size.
 - `.github/workflows/ci.yml` runs Ruff and the pytest suite for pushes and pull requests on Python 3.11.
+- `checkpoints/.gitkeep` keeps the ignored local model-output directory in a fresh checkout; model bundles generated during training are ignored.
+- `results/.gitkeep` keeps the ignored local training/evaluation-output directory in a fresh checkout; generated runs are ignored.
 
 ## Application package: `src/quantlab`
 
