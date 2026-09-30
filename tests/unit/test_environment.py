@@ -36,4 +36,4 @@ def test_action_is_clipped_to_action_space():
     env = HedgingEnv(HedgingEnvParams(steps=1))
     env.reset(seed=1)
     env.step(np.array([10.0], dtype=np.float32))
-    assert env.hedge_position == 1.0
+    assert env.hedge_position == 0.0  # Terminal stock liquidation.

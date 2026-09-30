@@ -36,6 +36,6 @@ class SMAStrategy(Strategy):
         else:
             values = np.asarray(self.prices, dtype=np.float64)
             target = 1.0 if values[-self.short_window :].mean() > values.mean() else 0.0
-        change = target - self.position
+        change = target - info.get("hedge_position", self.position)
         self.position = target
         return float(change)

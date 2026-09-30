@@ -1,4 +1,4 @@
-seed: 42
+seed: 11
 experiment_name: ppo_hedging
 checkpoint_dir: checkpoints
 results_dir: results
@@ -20,16 +20,20 @@ environment:
 
 ppo:
   policy: MlpPolicy
-  total_timesteps: 10000
+  total_timesteps: 100000
   learning_rate: 0.0003
   batch_size: 64
-  gamma: 0.99
+  gamma: 1.0
   gae_lambda: 0.95
   clip_range: 0.2
   n_steps: 256
-  verbose: 1
+  verbose: 0
+  validation_frequency: 25000
 
 evaluation:
-  episodes: 10
+  episodes: 1000
   deterministic: true
   include_no_hedge: true
+  seed_start: 200000
+  chunk_size: 250
+  bootstrap_samples: 2000

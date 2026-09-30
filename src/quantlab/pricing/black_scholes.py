@@ -1,56 +1,57 @@
-"""Black-Scholes pricing and Greeks for European call options."""
+"""European-call prices and Greeks; scalar reference and vectorized implementation."""
 
 from __future__ import annotations
 
 import math
 
-from scipy.stats import norm
+import numpy as np
+from scipy.special import ndtr
 
 
-def _validate_inputs(S: float, K: float, T: float, sigma: float) -> None:
-    if S <= 0:
-        raise ValueError("S must be positive.")
-    if K <= 0:
-        raise ValueError("K must be positive.")
-    if T < 0:
-        raise ValueError("T cannot be negative.")
-    if sigma < 0:
-        raise ValueError("sigma cannot be negative.")
+def call_features(S, K: float, T, r: float, sigma: float) -> np.ndarray:
+    """Return broadcast price/delta/gamma arrays, with features on the last axis."""
+    spots, times = np.broadcast_arrays(np.asarray(S, dtype=float), np.asarray(T, dtype=float))
+    if not (np.isfinite(spots).all() and np.isfinite(times).all() and np.isfinite([K, r, sigma]).all()):
+        raise ValueError("Pricing inputs must be finite.")
+    if np.any(spots <= 0) or K <= 0 or np.any(times < 0) or sigma < 0:
+        raise ValueError("Require positive S/K and nonnegative T/sigma.")
+    strike = K * np.exp(-r * times)
+    price = np.maximum(spots - strike, 0.0)
+    delta = (spots > strike).astype(float)
+    gamma = np.zeros_like(spots)
+    active = (times > 0) & (sigma > 0)
+    root = sigma * np.sqrt(np.where(active, times, 1.0))
+    root = np.where(active, root, 1.0)
+    d1 = (np.log(spots / K) + (r + 0.5 * sigma**2) * times) / root
+    price = np.where(active, spots * ndtr(d1) - strike * ndtr(d1 - root), price)
+    delta = np.where(active, ndtr(d1), delta)
+    gamma = np.where(active, np.exp(-0.5 * d1**2) / (math.sqrt(2 * math.pi) * spots * root), gamma)
+    return np.stack([price, delta, gamma], axis=-1)
 
 
-def _d1(S: float, K: float, T: float, r: float, sigma: float) -> float:
-    return (math.log(S / K) + (r + 0.5 * sigma**2) * T) / (sigma * math.sqrt(T))
+def scalar_call_features(S: float, K: float, T: float, r: float, sigma: float) -> tuple[float, float, float]:
+    """Independent scalar formula for the reference engine."""
+    if not all(math.isfinite(x) for x in (S, K, T, r, sigma)):
+        raise ValueError("Pricing inputs must be finite.")
+    if S <= 0 or K <= 0 or T < 0 or sigma < 0:
+        raise ValueError("Require positive S/K and nonnegative T/sigma.")
+    strike = K * math.exp(-r * T)
+    if T == 0 or sigma == 0:
+        return max(S - strike, 0.0), float(S > strike), 0.0
+    root = sigma * math.sqrt(T)
+    d1 = (math.log(S / K) + (r + 0.5 * sigma**2) * T) / root
+    cdf1 = 0.5 * math.erfc(-d1 / math.sqrt(2))
+    cdf2 = 0.5 * math.erfc(-(d1 - root) / math.sqrt(2))
+    return S * cdf1 - strike * cdf2, cdf1, math.exp(-0.5 * d1 * d1) / (math.sqrt(2 * math.pi) * S * root)
 
 
 def bs_call_price(S: float, K: float, T: float, r: float, sigma: float) -> float:
-    """Return the Black-Scholes European call option price."""
-    _validate_inputs(S, K, T, sigma)
-    if T == 0:
-        return max(S - K, 0.0)
-    if sigma == 0:
-        return max(S - K * math.exp(-r * T), 0.0)
-
-    d1 = _d1(S, K, T, r, sigma)
-    d2 = d1 - sigma * math.sqrt(T)
-    return float(S * norm.cdf(d1) - K * math.exp(-r * T) * norm.cdf(d2))
+    return scalar_call_features(S, K, T, r, sigma)[0]
 
 
 def bs_delta(S: float, K: float, T: float, r: float, sigma: float) -> float:
-    """Return the Black-Scholes delta for a European call option."""
-    _validate_inputs(S, K, T, sigma)
-    if T == 0:
-        return 1.0 if S > K else 0.0
-    if sigma == 0:
-        return 1.0 if S > K * math.exp(-r * T) else 0.0
-
-    return float(norm.cdf(_d1(S, K, T, r, sigma)))
+    return scalar_call_features(S, K, T, r, sigma)[1]
 
 
 def bs_gamma(S: float, K: float, T: float, r: float, sigma: float) -> float:
-    """Return the Black-Scholes gamma for a European call option."""
-    _validate_inputs(S, K, T, sigma)
-    if T == 0 or sigma == 0:
-        return 0.0
-
-    d1 = _d1(S, K, T, r, sigma)
-    return float(norm.pdf(d1) / (S * sigma * math.sqrt(T)))
+    return scalar_call_features(S, K, T, r, sigma)[2]

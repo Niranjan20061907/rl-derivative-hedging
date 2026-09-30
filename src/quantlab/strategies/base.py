@@ -19,6 +19,10 @@ class StrategyResult:
     hedging_error: np.ndarray
     transaction_costs: np.ndarray
     actions: np.ndarray
+    cash_balances: np.ndarray
+    portfolio_values: np.ndarray
+    turnover: np.ndarray
+    terminal_error: float
 
 
 class Strategy:

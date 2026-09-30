@@ -12,3 +12,9 @@ def test_black_scholes_known_values():
 def test_black_scholes_validates_inputs():
     with pytest.raises(ValueError):
         bs_call_price(0, 100, 1.0, 0.05, 0.2)
+
+
+@pytest.mark.parametrize("value", [float("nan"), float("inf"), -float("inf")])
+def test_nonfinite_pricing_rejected(value):
+    with pytest.raises(ValueError, match="finite"):
+        bs_call_price(value, 100, 1, 0.05, 0.2)

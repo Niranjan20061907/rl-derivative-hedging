@@ -12,11 +12,14 @@ class PPOHedgingStrategy(Strategy):
 
     name = "ppo"
 
-    def __init__(self, model, deterministic: bool = True) -> None:
+    def __init__(self, model, deterministic: bool = True, normalizer=None) -> None:
         self.model = model
+        self.normalizer = normalizer
         self.deterministic = deterministic
 
     def action(self, observation: np.ndarray, info: dict) -> float:
         del info
+        if self.normalizer is not None:
+            observation = self.normalizer.normalize_obs(observation)
         action, _ = self.model.predict(observation, deterministic=self.deterministic)
         return float(np.asarray(action).reshape(-1)[0])

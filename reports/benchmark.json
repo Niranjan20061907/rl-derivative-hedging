@@ -1,0 +1,132 @@
+{
+  "provenance": {
+    "git_commit": "05815fd00a4daa9ff2ea5ed3bca3e5546158eb18",
+    "git_dirty": true,
+    "python": "3.11.14",
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "machine": "arm64",
+    "processor": "arm",
+    "dependencies": {
+      "numpy": "1.26.4",
+      "scipy": "1.14.1",
+      "torch": "2.13.0",
+      "stable-baselines3": "2.9.0",
+      "gymnasium": "1.0.0",
+      "PyYAML": "6.0.3"
+    },
+    "contract_version": "funded-call-v2-observation7"
+  },
+  "repeats": 5,
+  "seed_start": 200000,
+  "setup_excluded": "path generation; feature computation included",
+  "memory_note": "tracemalloc peak from separate run; native allocator memory may be excluded",
+  "process_max_rss_raw": 56197120,
+  "results": [
+    {
+      "paths": 100,
+      "steps": 252,
+      "chunk_size": 250,
+      "speedup": 1.6110580285967075,
+      "max_reference_difference": 4.263256414560601e-14,
+      "engines": {
+        "reference": {
+          "seconds": [
+            0.13032150000799447,
+            0.12981783301802352,
+            0.13062708295183256,
+            0.13053691596724093,
+            0.1311721249949187
+          ],
+          "median_seconds": 0.13053691596724093,
+          "p95_seconds": 0.1310631165863015,
+          "paths_per_second": 766.0668191754709,
+          "peak_traced_bytes": 812963
+        },
+        "optimized": {
+          "seconds": [
+            0.08102558297105134,
+            0.08126150001771748,
+            0.08185204199980944,
+            0.08050279202871025,
+            0.08041291701374575
+          ],
+          "median_seconds": 0.08102558297105134,
+          "p95_seconds": 0.08173393360339105,
+          "paths_per_second": 1234.1780994741846,
+          "peak_traced_bytes": 812963
+        }
+      }
+    },
+    {
+      "paths": 1000,
+      "steps": 252,
+      "chunk_size": 250,
+      "speedup": 1.6211152529501371,
+      "max_reference_difference": 4.263256414560601e-14,
+      "engines": {
+        "reference": {
+          "seconds": [
+            1.317218623997178,
+            1.3148734589340165,
+            1.317871292005293,
+            1.3188530409825034,
+            1.3080705010797828
+          ],
+          "median_seconds": 1.317218623997178,
+          "p95_seconds": 1.3186566911870614,
+          "paths_per_second": 759.1754184020272,
+          "peak_traced_bytes": 2536396
+        },
+        "optimized": {
+          "seconds": [
+            0.8117631670320407,
+            0.8127893759519793,
+            0.8125385419698432,
+            0.8165533340070397,
+            0.8084395410260186
+          ],
+          "median_seconds": 0.8125385419698432,
+          "p95_seconds": 0.8158005423960276,
+          "paths_per_second": 1230.7108504363284,
+          "peak_traced_bytes": 2536396
+        }
+      }
+    },
+    {
+      "paths": 10000,
+      "steps": 252,
+      "chunk_size": 250,
+      "speedup": 1.592863338210278,
+      "max_reference_difference": 4.263256414560601e-14,
+      "engines": {
+        "reference": {
+          "seconds": [
+            13.399074835062493,
+            13.243754789058585,
+            13.185165124945343,
+            13.126525330008008,
+            13.202678544912487
+          ],
+          "median_seconds": 13.202678544912487,
+          "p95_seconds": 13.368010825861711,
+          "paths_per_second": 757.4220614386915,
+          "peak_traced_bytes": 2536110
+        },
+        "optimized": {
+          "seconds": [
+            8.215233167924453,
+            8.20669174788054,
+            8.34206941415323,
+            8.288644875050522,
+            8.328103042033035
+          ],
+          "median_seconds": 8.288644875050522,
+          "p95_seconds": 8.33927613972919,
+          "paths_per_second": 1206.4698332173443,
+          "peak_traced_bytes": 2536169
+        }
+      }
+    }
+  ],
+  "timing_note": "Timed again after PPO training and evaluation completed; retained separate traced-memory measurements."
+}

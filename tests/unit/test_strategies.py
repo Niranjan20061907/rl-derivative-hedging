@@ -6,7 +6,8 @@ from quantlab.strategies.sma import SMAStrategy
 
 def test_delta_strategy_produces_valid_hedge_change():
     strategy = DeltaHedgingStrategy(K=100, r=0.05, sigma=0.2, T=1.0, steps=4)
-    action = strategy.action(np.zeros(6), {"t": 0, "price": 100.0})
+    obs = np.array([0, 0.6368, 0, 1, 0.2, 0, 1])
+    action = strategy.action(obs, {"t": 0, "price": 100.0, "hedge_position": 0.0})
     assert 0.0 <= action <= 1.0
 
 

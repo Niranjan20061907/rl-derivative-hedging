@@ -1,0 +1,650 @@
+{
+  "provenance": {
+    "git_commit": "05815fd00a4daa9ff2ea5ed3bca3e5546158eb18",
+    "git_dirty": true,
+    "python": "3.11.14",
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "machine": "arm64",
+    "processor": "arm",
+    "dependencies": {
+      "numpy": "1.26.4",
+      "scipy": "1.14.1",
+      "torch": "2.13.0",
+      "stable-baselines3": "2.9.0",
+      "gymnasium": "1.0.0",
+      "PyYAML": "6.0.3"
+    },
+    "contract_version": "funded-call-v2-observation7"
+  },
+  "config": {
+    "seed": 22,
+    "experiment_name": "ppo_hedging",
+    "checkpoint_dir": "checkpoints",
+    "results_dir": "results",
+    "environment": {
+      "S0": 100.0,
+      "K": 100.0,
+      "r": 0.05,
+      "sigma": 0.2,
+      "T": 1.0,
+      "steps": 252,
+      "cost_rate": 0.001,
+      "use_heston": false,
+      "lambda_risk": 0.1,
+      "heston_rho": -0.7,
+      "heston_kappa": 2.0,
+      "heston_theta": null,
+      "heston_vol_of_vol": 0.5
+    },
+    "ppo": {
+      "policy": "MlpPolicy",
+      "total_timesteps": 100000,
+      "learning_rate": 0.0003,
+      "batch_size": 64,
+      "gamma": 1.0,
+      "gae_lambda": 0.95,
+      "clip_range": 0.2,
+      "n_steps": 256,
+      "verbose": 0,
+      "validation_frequency": 25000
+    },
+    "evaluation": {
+      "episodes": 1000,
+      "deterministic": true,
+      "include_no_hedge": true,
+      "seed_start": 200000,
+      "chunk_size": 250,
+      "bootstrap_samples": 2000
+    }
+  },
+  "seed_start": 200000,
+  "episodes_per_scenario": 1000,
+  "scenarios": {
+    "sigma0.1_cost0": {
+      "parameters": {
+        "sigma": 0.1,
+        "cost_rate": 0.0
+      },
+      "metrics": {
+        "delta": {
+          "terminal_mae": 0.16008830711800684,
+          "terminal_rmse": 0.21556558383370752,
+          "terminal_bias": 0.0024482365605596555,
+          "terminal_p95_absolute_error": 0.4384328861226773,
+          "worst_5pct_loss_mean": 0.474347332606085,
+          "mean_transaction_cost": 0.0,
+          "mean_turnover": 5.905628387006673
+        },
+        "delta_5": {
+          "terminal_mae": 0.327627217459232,
+          "terminal_rmse": 0.43388341472755704,
+          "terminal_bias": -0.023809443642438262,
+          "terminal_p95_absolute_error": 0.9117502716219947,
+          "worst_5pct_loss_mean": 1.060686741581481,
+          "mean_transaction_cost": 0.0,
+          "mean_turnover": 3.439375688950292
+        },
+        "no_hedge": {
+          "terminal_mae": 6.4235807613986,
+          "terminal_rmse": 7.975207870016897,
+          "terminal_bias": 0.21016654996214693,
+          "terminal_p95_absolute_error": 15.085000662951247,
+          "worst_5pct_loss_mean": 21.39725479128244,
+          "mean_transaction_cost": 0.0,
+          "mean_turnover": 0.0
+        },
+        "ppo": {
+          "terminal_mae": 1.9818799846757378,
+          "terminal_rmse": 2.4824754881630104,
+          "terminal_bias": -0.05448264454975766,
+          "terminal_p95_absolute_error": 4.692469246375077,
+          "worst_5pct_loss_mean": 6.086922120395205,
+          "mean_transaction_cost": 0.0,
+          "mean_turnover": 3.2796353700831533
+        }
+      },
+      "vs_daily_delta": {
+        "delta_5": {
+          "mae_difference": 0.16753891034122517,
+          "mae_difference_ci95": [
+            0.15092896719875196,
+            0.18412605861975787
+          ],
+          "rmse_difference": 0.2183178308938495,
+          "rmse_difference_ci95": [
+            0.1953796024680133,
+            0.24219862877962095
+          ],
+          "bootstrap_seed": 77,
+          "bootstrap_samples": 2000,
+          "unit": "paired price path"
+        },
+        "no_hedge": {
+          "mae_difference": 6.263492454280592,
+          "mae_difference_ci95": [
+            5.985921644342499,
+            6.56350495096593
+          ],
+          "rmse_difference": 7.7596422861831895,
+          "rmse_difference_ci95": [
+            7.31180757056776,
+            8.217271920141247
+          ],
+          "bootstrap_seed": 77,
+          "bootstrap_samples": 2000,
+          "unit": "paired price path"
+        },
+        "ppo": {
+          "mae_difference": 1.8217916775577307,
+          "mae_difference_ci95": [
+            1.724414012058365,
+            1.9136855906195405
+          ],
+          "rmse_difference": 2.266909904329303,
+          "rmse_difference_ci95": [
+            2.1296447890893213,
+            2.398081360335181
+          ],
+          "bootstrap_seed": 77,
+          "bootstrap_samples": 2000,
+          "unit": "paired price path"
+        }
+      },
+      "wall_time_seconds": 2.6147766250069253,
+      "ppo_inference_seconds": 0.17396534304134548
+    },
+    "sigma0.1_cost0.001": {
+      "parameters": {
+        "sigma": 0.1,
+        "cost_rate": 0.001
+      },
+      "metrics": {
+        "delta": {
+          "terminal_mae": 0.6107345514817342,
+          "terminal_rmse": 0.6734773209719904,
+          "terminal_bias": -0.6103461976819199,
+          "terminal_p95_absolute_error": 1.1387445017267124,
+          "worst_5pct_loss_mean": 1.3241273586747895,
+          "mean_transaction_cost": 0.5978797462534292,
+          "mean_turnover": 5.905628387006673
+        },
+        "delta_5": {
+          "terminal_mae": 0.45744750342274904,
+          "terminal_rmse": 0.5946366617613742,
+          "terminal_bias": -0.3835429166152906,
+          "terminal_p95_absolute_error": 1.2047861485065587,
+          "worst_5pct_loss_mean": 1.521648817301329,
+          "mean_transaction_cost": 0.3510645573564608,
+          "mean_turnover": 3.439375688950292
+        },
+        "no_hedge": {
+          "terminal_mae": 6.4235807613986,
+          "terminal_rmse": 7.975207870016897,
+          "terminal_bias": 0.21016654996214693,
+          "terminal_p95_absolute_error": 15.085000662951247,
+          "worst_5pct_loss_mean": 21.39725479128244,
+          "mean_transaction_cost": 0.0,
+          "mean_turnover": 0.0
+        },
+        "ppo": {
+          "terminal_mae": 2.04881292836991,
+          "terminal_rmse": 2.65553437757656,
+          "terminal_bias": -0.3952187322303037,
+          "terminal_p95_absolute_error": 5.295462220736157,
+          "worst_5pct_loss_mean": 6.805621423010279,
+          "mean_transaction_cost": 0.3321470374162195,
+          "mean_turnover": 3.2800431021749974
+        }
+      },
+      "vs_daily_delta": {
+        "delta_5": {
+          "mae_difference": -0.15328704805898502,
+          "mae_difference_ci95": [
+            -0.17568472050684,
+            -0.13121859014152498
+          ],
+          "rmse_difference": -0.07884065921061623,
+          "rmse_difference_ci95": [
+            -0.10772209715325495,
+            -0.0494644362342519
+          ],
+          "bootstrap_seed": 77,
+          "bootstrap_samples": 2000,
+          "unit": "paired price path"
+        },
+        "no_hedge": {
+          "mae_difference": 5.812846209916865,
+          "mae_difference_ci95": [
+            5.527482468318044,
+            6.111857291695494
+          ],
+          "rmse_difference": 7.3017305490449065,
+          "rmse_difference_ci95": [
+            6.850740703029614,
+            7.751646832801535
+          ],
+          "bootstrap_seed": 77,
+          "bootstrap_samples": 2000,
+          "unit": "paired price path"
+        },
+        "ppo": {
+          "mae_difference": 1.4380783768881755,
+          "mae_difference_ci95": [
+            1.3312936484358224,
+            1.5418528638129843
+          ],
+          "rmse_difference": 1.9820570566045697,
+          "rmse_difference_ci95": [
+            1.8263321522600022,
+            2.1310436413915146
+          ],
+          "bootstrap_seed": 77,
+          "bootstrap_samples": 2000,
+          "unit": "paired price path"
+        }
+      },
+      "wall_time_seconds": 2.7985261249705218,
+      "ppo_inference_seconds": 0.19453057093778625
+    },
+    "sigma0.2_cost0": {
+      "parameters": {
+        "sigma": 0.2,
+        "cost_rate": 0.0
+      },
+      "metrics": {
+        "delta": {
+          "terminal_mae": 0.3451532843066609,
+          "terminal_rmse": 0.4605224623754047,
+          "terminal_bias": 0.01943483335628725,
+          "terminal_p95_absolute_error": 0.9250234088153958,
+          "worst_5pct_loss_mean": 0.9996419883587158,
+          "mean_transaction_cost": 0.0,
+          "mean_turnover": 6.210722158284459
+        },
+        "delta_5": {
+          "terminal_mae": 0.7330530458651769,
+          "terminal_rmse": 0.9624342294230083,
+          "terminal_bias": -0.026610603437254812,
+          "terminal_p95_absolute_error": 1.923487063979161,
+          "worst_5pct_loss_mean": 2.218104648178777,
+          "mean_transaction_cost": 0.0,
+          "mean_turnover": 3.47272770028752
+        },
+        "no_hedge": {
+          "terminal_mae": 11.779508127514033,
+          "terminal_rmse": 15.224049757474049,
+          "terminal_bias": 0.48775701208242117,
+          "terminal_p95_absolute_error": 29.735242922163074,
+          "worst_5pct_loss_mean": 44.92062806188021,
+          "mean_transaction_cost": 0.0,
+          "mean_turnover": 0.0
+        },
+        "ppo": {
+          "terminal_mae": 5.046369361806226,
+          "terminal_rmse": 6.6747819728343725,
+          "terminal_bias": -0.43876938617201927,
+          "terminal_p95_absolute_error": 11.960512717841436,
+          "worst_5pct_loss_mean": 15.627122159431588,
+          "mean_transaction_cost": 0.0,
+          "mean_turnover": 2.8225494991578164
+        }
+      },
+      "vs_daily_delta": {
+        "delta_5": {
+          "mae_difference": 0.3878997615585159,
+          "mae_difference_ci95": [
+            0.35104746637983325,
+            0.4266797335361988
+          ],
+          "rmse_difference": 0.5019117670476037,
+          "rmse_difference_ci95": [
+            0.44703670059528255,
+            0.5603473192494884
+          ],
+          "bootstrap_seed": 77,
+          "bootstrap_samples": 2000,
+          "unit": "paired price path"
+        },
+        "no_hedge": {
+          "mae_difference": 11.434354843207373,
+          "mae_difference_ci95": [
+            10.856228966276255,
+            12.062475551034428
+          ],
+          "rmse_difference": 14.763527295098644,
+          "rmse_difference_ci95": [
+            13.643301132124439,
+            15.871252527697061
+          ],
+          "bootstrap_seed": 77,
+          "bootstrap_samples": 2000,
+          "unit": "paired price path"
+        },
+        "ppo": {
+          "mae_difference": 4.701216077499565,
+          "mae_difference_ci95": [
+            4.439565345036638,
+            4.962744872597643
+          ],
+          "rmse_difference": 6.214259510458968,
+          "rmse_difference_ci95": [
+            5.894657947495744,
+            6.532193050238638
+          ],
+          "bootstrap_seed": 77,
+          "bootstrap_samples": 2000,
+          "unit": "paired price path"
+        }
+      },
+      "wall_time_seconds": 2.875064666965045,
+      "ppo_inference_seconds": 0.19129253912251443
+    },
+    "sigma0.2_cost0.001": {
+      "parameters": {
+        "sigma": 0.2,
+        "cost_rate": 0.001
+      },
+      "metrics": {
+        "delta": {
+          "terminal_mae": 0.6588110849190262,
+          "terminal_rmse": 0.8013765311105333,
+          "terminal_bias": -0.6270835790233018,
+          "terminal_p95_absolute_error": 1.5285219640000476,
+          "worst_5pct_loss_mean": 1.8565286350738837,
+          "mean_transaction_cost": 0.6308171847110705,
+          "mean_turnover": 6.210722158284459
+        },
+        "delta_5": {
+          "terminal_mae": 0.7925712650549545,
+          "terminal_rmse": 1.0555898423743995,
+          "terminal_bias": -0.3927513863338011,
+          "terminal_p95_absolute_error": 2.1543306946392082,
+          "worst_5pct_loss_mean": 2.6848732817364502,
+          "mean_transaction_cost": 0.3573310410286219,
+          "mean_turnover": 3.47272770028752
+        },
+        "no_hedge": {
+          "terminal_mae": 11.779508127514033,
+          "terminal_rmse": 15.224049757474049,
+          "terminal_bias": 0.48775701208242117,
+          "terminal_p95_absolute_error": 29.735242922163074,
+          "worst_5pct_loss_mean": 44.92062806188021,
+          "mean_transaction_cost": 0.0,
+          "mean_turnover": 0.0
+        },
+        "ppo": {
+          "terminal_mae": 5.156704180541396,
+          "terminal_rmse": 6.861761231592873,
+          "terminal_bias": -0.7372472387335777,
+          "terminal_p95_absolute_error": 12.59854958268483,
+          "worst_5pct_loss_mean": 16.341496978320006,
+          "mean_transaction_cost": 0.2944180910396026,
+          "mean_turnover": 2.820364549521357
+        }
+      },
+      "vs_daily_delta": {
+        "delta_5": {
+          "mae_difference": 0.1337601801359284,
+          "mae_difference_ci95": [
+            0.09012718124607993,
+            0.17734626281382754
+          ],
+          "rmse_difference": 0.25421331126386615,
+          "rmse_difference_ci95": [
+            0.1932550310174295,
+            0.3167323860129631
+          ],
+          "bootstrap_seed": 77,
+          "bootstrap_samples": 2000,
+          "unit": "paired price path"
+        },
+        "no_hedge": {
+          "mae_difference": 11.120697042595008,
+          "mae_difference_ci95": [
+            10.54265321111888,
+            11.74763516517397
+          ],
+          "rmse_difference": 14.422673226363516,
+          "rmse_difference_ci95": [
+            13.31211015508609,
+            15.541973751884306
+          ],
+          "bootstrap_seed": 77,
+          "bootstrap_samples": 2000,
+          "unit": "paired price path"
+        },
+        "ppo": {
+          "mae_difference": 4.497893095622369,
+          "mae_difference_ci95": [
+            4.23235383160849,
+            4.767108699542792
+          ],
+          "rmse_difference": 6.06038470048234,
+          "rmse_difference_ci95": [
+            5.733417067271545,
+            6.382403687763712
+          ],
+          "bootstrap_seed": 77,
+          "bootstrap_samples": 2000,
+          "unit": "paired price path"
+        }
+      },
+      "wall_time_seconds": 2.8612229579593986,
+      "ppo_inference_seconds": 0.19003007211722434
+    },
+    "sigma0.4_cost0": {
+      "parameters": {
+        "sigma": 0.4,
+        "cost_rate": 0.0
+      },
+      "metrics": {
+        "delta": {
+          "terminal_mae": 0.6842877817813796,
+          "terminal_rmse": 0.910197466580077,
+          "terminal_bias": 0.03502485256873751,
+          "terminal_p95_absolute_error": 1.8084026051279671,
+          "worst_5pct_loss_mean": 1.9650634811403362,
+          "mean_transaction_cost": 0.0,
+          "mean_turnover": 6.208531050243205
+        },
+        "delta_5": {
+          "terminal_mae": 1.4817690309982867,
+          "terminal_rmse": 1.9656619969159677,
+          "terminal_bias": -0.03656741716362819,
+          "terminal_p95_absolute_error": 4.010109650692777,
+          "worst_5pct_loss_mean": 4.6739360324897135,
+          "mean_transaction_cost": 0.0,
+          "mean_turnover": 3.4077766806060854
+        },
+        "no_hedge": {
+          "terminal_mae": 23.038809002821587,
+          "terminal_rmse": 32.43015725130467,
+          "terminal_bias": 1.013813145984379,
+          "terminal_p95_absolute_error": 62.03494606684735,
+          "worst_5pct_loss_mean": 104.82537941147567,
+          "mean_transaction_cost": 0.0,
+          "mean_turnover": 0.0
+        },
+        "ppo": {
+          "terminal_mae": 9.193512628037446,
+          "terminal_rmse": 11.54705364858958,
+          "terminal_bias": -0.8149609787612773,
+          "terminal_p95_absolute_error": 22.693498975788724,
+          "worst_5pct_loss_mean": 28.41768774182698,
+          "mean_transaction_cost": 0.0,
+          "mean_turnover": 4.163957348242402
+        }
+      },
+      "vs_daily_delta": {
+        "delta_5": {
+          "mae_difference": 0.7974812492169073,
+          "mae_difference_ci95": [
+            0.7211521815150715,
+            0.8735446104487834
+          ],
+          "rmse_difference": 1.0554645303358905,
+          "rmse_difference_ci95": [
+            0.9437548843988773,
+            1.1770902271860375
+          ],
+          "bootstrap_seed": 77,
+          "bootstrap_samples": 2000,
+          "unit": "paired price path"
+        },
+        "no_hedge": {
+          "mae_difference": 22.35452122104021,
+          "mae_difference_ci95": [
+            21.010064172979067,
+            23.82241767637241
+          ],
+          "rmse_difference": 31.519959784724595,
+          "rmse_difference_ci95": [
+            28.26721337802491,
+            34.59989694042567
+          ],
+          "bootstrap_seed": 77,
+          "bootstrap_samples": 2000,
+          "unit": "paired price path"
+        },
+        "ppo": {
+          "mae_difference": 8.509224846256068,
+          "mae_difference_ci95": [
+            8.053016169783676,
+            8.936948632314248
+          ],
+          "rmse_difference": 10.636856182009502,
+          "rmse_difference_ci95": [
+            10.077727126794922,
+            11.177658777597925
+          ],
+          "bootstrap_seed": 77,
+          "bootstrap_samples": 2000,
+          "unit": "paired price path"
+        }
+      },
+      "wall_time_seconds": 3.4531029580393806,
+      "ppo_inference_seconds": 0.2072559812804684
+    },
+    "sigma0.4_cost0.001": {
+      "parameters": {
+        "sigma": 0.4,
+        "cost_rate": 0.001
+      },
+      "metrics": {
+        "delta": {
+          "terminal_mae": 0.8570712095047807,
+          "terminal_rmse": 1.1170384244233964,
+          "terminal_bias": -0.6134792128229919,
+          "terminal_p95_absolute_error": 2.2672529815887286,
+          "worst_5pct_loss_mean": 2.796357857445809,
+          "mean_transaction_cost": 0.632713288874763,
+          "mean_turnover": 6.208531050243205
+        },
+        "delta_5": {
+          "terminal_mae": 1.5073424937638629,
+          "terminal_rmse": 2.0210594164728524,
+          "terminal_bias": -0.4009058527718031,
+          "terminal_p95_absolute_error": 4.057502021717518,
+          "worst_5pct_loss_mean": 5.139565545337219,
+          "mean_transaction_cost": 0.35551966249360245,
+          "mean_turnover": 3.4077766806060854
+        },
+        "no_hedge": {
+          "terminal_mae": 23.038809002821587,
+          "terminal_rmse": 32.43015725130467,
+          "terminal_bias": 1.013813145984379,
+          "terminal_p95_absolute_error": 62.03494606684735,
+          "worst_5pct_loss_mean": 104.82537941147567,
+          "mean_transaction_cost": 0.0,
+          "mean_turnover": 0.0
+        },
+        "ppo": {
+          "terminal_mae": 9.340369849500014,
+          "terminal_rmse": 11.797432342370783,
+          "terminal_bias": -1.2564925047478346,
+          "terminal_p95_absolute_error": 23.554129702322616,
+          "worst_5pct_loss_mean": 29.348735280951733,
+          "mean_transaction_cost": 0.42902626713497355,
+          "mean_turnover": 4.163232520624995
+        }
+      },
+      "vs_daily_delta": {
+        "delta_5": {
+          "mae_difference": 0.6502712842590822,
+          "mae_difference_ci95": [
+            0.574021683424225,
+            0.7296763976082825
+          ],
+          "rmse_difference": 0.904020992049456,
+          "rmse_difference_ci95": [
+            0.7849166890757634,
+            1.025908451614989
+          ],
+          "bootstrap_seed": 77,
+          "bootstrap_samples": 2000,
+          "unit": "paired price path"
+        },
+        "no_hedge": {
+          "mae_difference": 22.18173779331681,
+          "mae_difference_ci95": [
+            20.825660207374938,
+            23.652105218763467
+          ],
+          "rmse_difference": 31.313118826881276,
+          "rmse_difference_ci95": [
+            28.051072520103443,
+            34.38396809209039
+          ],
+          "bootstrap_seed": 77,
+          "bootstrap_samples": 2000,
+          "unit": "paired price path"
+        },
+        "ppo": {
+          "mae_difference": 8.483298639995231,
+          "mae_difference_ci95": [
+            8.008151739232327,
+            8.914752707074063
+          ],
+          "rmse_difference": 10.680393917947386,
+          "rmse_difference_ci95": [
+            10.101833907955731,
+            11.235151168133962
+          ],
+          "bootstrap_seed": 77,
+          "bootstrap_samples": 2000,
+          "unit": "paired price path"
+        }
+      },
+      "wall_time_seconds": 3.287137709034141,
+      "ppo_inference_seconds": 0.2149926945567131
+    }
+  },
+  "model_manifest": {
+    "contract_version": "funded-call-v2-observation7",
+    "model_sha256": "4dec1c323c559f026a00440ceb9da69c68eecfe34e338fad2d9768e4fb789903",
+    "normalization_file": "best.pkl",
+    "normalization_sha256": "abd94cf4447fd3bae6964f248d5209e6b6a45a76ac708deffa5c9f25a00659e1",
+    "seed": 22,
+    "environment": {
+      "S0": 100.0,
+      "K": 100.0,
+      "r": 0.05,
+      "sigma": 0.2,
+      "T": 1.0,
+      "steps": 252,
+      "cost_rate": 0.001,
+      "use_heston": false,
+      "lambda_risk": 0.1,
+      "heston_rho": -0.7,
+      "heston_kappa": 2.0,
+      "heston_theta": null,
+      "heston_vol_of_vol": 0.5
+    },
+    "best_validation_rmse": 6.66866304499173,
+    "validation_seed_start": 100000,
+    "validation_episodes": 200,
+    "run_id": "20260930T095058Z_seed22_098ff50f"
+  },
+  "output_dir": "reports/controlled-experiment/seed22",
+  "uncertainty_note": "Path-paired intervals conditional on this trained model; training seeds reported separately."
+}

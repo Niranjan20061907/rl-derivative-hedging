@@ -18,6 +18,10 @@ def simulate_heston(
     rng: np.random.Generator | None = None,
 ) -> tuple[np.ndarray, np.ndarray]:
     """Simulate one Heston price and variance path using Euler discretization."""
+    if not np.isfinite([S0, v0, rho, kappa, theta, sigma, T]).all():
+        raise ValueError("Heston parameters must be finite.")
+    if not isinstance(steps, int) or isinstance(steps, bool):
+        raise ValueError("steps must be an integer.")
     if S0 <= 0:
         raise ValueError("S0 must be positive.")
     if v0 < 0 or theta < 0:

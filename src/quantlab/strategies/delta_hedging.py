@@ -1,44 +1,34 @@
-"""Black-Scholes delta hedging baseline."""
+"""Daily and periodic delta baselines, using the executed position."""
 
 from __future__ import annotations
 
 import numpy as np
 
-from quantlab.pricing.black_scholes import bs_delta
 from quantlab.strategies.base import Strategy
 
 
 class DeltaHedgingStrategy(Strategy):
-    """Discrete delta hedging strategy using Black-Scholes delta."""
-
     name = "delta"
 
-    def __init__(self, K: float, r: float, sigma: float, T: float, steps: int) -> None:
-        self.K = K
-        self.r = r
-        self.sigma = sigma
-        self.T = T
-        self.steps = steps
-        self.hedge_position = 0.0
-
-    def reset(self) -> None:
-        self.hedge_position = 0.0
+    def __init__(self, K: float, r: float, sigma: float, T: float, steps: int, interval: int = 1):
+        if not isinstance(interval, int) or interval <= 0:
+            raise ValueError("interval must be a positive integer.")
+        self.K, self.r, self.sigma, self.T, self.steps = K, r, sigma, T, steps
+        self.interval = interval
+        self.name = "delta" if interval == 1 else f"delta_{interval}"
 
     def action(self, observation: np.ndarray, info: dict) -> float:
-        del observation
-        remaining_T = self.T * (1 - info["t"] / self.steps)
-        target_delta = bs_delta(info["price"], self.K, remaining_T, self.r, self.sigma)
-        hedge_change = target_delta - self.hedge_position
-        self.hedge_position = target_delta
-        return float(hedge_change)
+        if info["t"] % self.interval:
+            return 0.0
+        return float(observation[1] - info["hedge_position"])
 
 
 def delta_hedge(prices: np.ndarray, K: float, r: float, sigma: float, T: float, cost_rate: float = 0.0):
-    """Compatibility helper returning the original baseline-style fields plus costs."""
     from quantlab.backtesting.engine import BacktestEngine
 
-    strategy = DeltaHedgingStrategy(K=K, r=r, sigma=sigma, T=T, steps=len(prices) - 1)
-    result = BacktestEngine(K=K, r=r, sigma=sigma, T=T, cost_rate=cost_rate).run(prices, strategy)
+    result = BacktestEngine(K, r, sigma, T, cost_rate).run(
+        prices, DeltaHedgingStrategy(K, r, sigma, T, len(prices) - 1)
+    )
     return {
         "option_values": result.option_values,
         "deltas": result.hedge_positions,

@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "quantlab"
-version = "0.1.0"
-description = "Async-ready backtesting and deep hedging foundation."
+version = "0.2.0"
+description = "Reproducible funded option hedging and controlled policy evaluation."
 readme = "README.md"
 requires-python = ">=3.11,<3.14"
 dependencies = [
@@ -17,11 +17,20 @@ dependencies = [
     "torch>=2.2,<3.0",
 ]
 
+[project.scripts]
+quantlab-train = "quantlab.rl.train:main"
+quantlab-evaluate = "quantlab.rl.evaluate:main"
+quantlab-experiment = "quantlab.rl.experiment:main"
+quantlab-report = "quantlab.rl.report:main"
+quantlab-benchmark = "quantlab.backtesting.benchmark:main"
+
 [project.optional-dependencies]
 dev = [
     "pytest>=8.0,<9.0",
     "ruff>=0.6,<1.0",
 ]
+
+report = ["matplotlib>=3.9,<4"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
